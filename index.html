@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>BFCo Weather</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: transparent;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    body {
+      background: url("YOUR_BACKGROUND_URL_HERE") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .panel {
+      text-align: center;
+      background: rgba(0,0,0,0.25);
+      padding: 20px 40px;
+      border-radius: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 48px;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    }
+
+    iframe {
+      border: none;
+      background: transparent;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="panel">
+    <h1>Los Banos, CA</h1>
+
+    <iframe
+      src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=large&timezone=America%2FLos_Angeles"
+      width="420"
+      height="140"
+      allowtransparency="true">
+    </iframe>
+  </div>
+</body>
+</html>
