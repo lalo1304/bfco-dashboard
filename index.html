@@ -1,164 +1,65 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>BFCo Weather</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      /* Fullscreen background */
-      background-image: url("bg.png");
-      background-repeat: no-repeat;
-      background-size: cover;
-
-      /* IMPORTANT: keep the logo in the top-left visible */
-      background-position: left top;
-
-      background-color: #1a2a3a;
-      color: #fff;
-      overflow: hidden;
-    }
-
-    /* Light readability overlay (doesn't create boxes) */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.12) 0%,
-        rgba(0,0,0,0.06) 55%,
-        rgba(0,0,0,0.10) 100%
-      );
-      pointer-events: none;
-    }
-
-    .wrap {
-      position: relative;
-      height: 100%;
-      padding: 18px 22px;
-      box-sizing: border-box;
-
-      display: grid;
-      grid-template-rows: auto 1fr;
-      gap: 16px;
-    }
-
-    /* One shared width container so header + widgets align perfectly */
-    .container {
-      width: min(1400px, 96vw);
-      margin: 0 auto;
-    }
-
-    /* Header panel (this is the ONLY stretched/wide element) */
-    .headerPanel {
-      width: 100%;
-      background: rgba(0,0,0,0.16);
-      border-radius: 18px;
-      padding: 12px 16px;
-      box-sizing: border-box;
-      backdrop-filter: blur(2px);
-    }
-
-    /* 3-up widget row aligned to same container width */
-    .grid {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      align-items: start;
-    }
-
-    /* Smaller, even tiles */
-    .tile {
-      background: rgba(0,0,0,0.14);
-      border-radius: 18px;
-      padding: 12px 12px 14px;
-      box-sizing: border-box;
-      backdrop-filter: blur(2px);
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      /* keeps all 3 tiles same height */
-      height: 290px;
-    }
-
-    /*
-      KEY FIX: do NOT stretch the iframe to 100%.
-      Keep the natural WillyWeather widget size so it doesn't look warped.
-    */
-    .tile iframe {
-      width: 300px;
-      height: 228px;
-      border: 0;
-      display: block;
-      background: transparent;
-    }
-
-    /* Responsive fallback */
-    @media (max-width: 1100px) {
-      .grid { grid-template-columns: 1fr; }
-      .tile { height: auto; }
-    }
-  </style>
-</head>
-
 <body>
   <div class="overlay"></div>
 
-  <div class="wrap">
-    <!-- HEADER (aligned to container width) -->
-    <div class="container">
-      <div class="headerPanel">
-        <div style="text-align:center; padding:0.2em 0; background:transparent;">
-          <h2 style="margin:0; font-weight:700;">
-            <a href="https://www.zeitverschiebung.net/en/city/5368453"
-               style="text-decoration:none; color:#ffffff; text-shadow:0 2px 6px rgba(0,0,0,0.45);">
-              <span style="font-size:0.8em; opacity:0.75;">Current local time in</span><br />
-              <span style="font-weight:800;">Los Banos, United States</span>
-            </a>
-          </h2>
+  <div class="wrap" style="
+      position:relative;
+      height:100%;
+      padding:18px 22px;
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+    ">
 
-          <iframe
-            allowtransparency="true"
-            frameborder="0"
-            scrolling="no"
-            height="140"
-            src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=large&timezone=America%2FLos_Angeles"
-            style="background:transparent; border:none; width:100%;"
-            width="100%"></iframe>
+    <!-- CLOCK CENTERED -->
+    <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+      <div class="container">
+        <div class="headerPanel">
+          <div style="text-align:center; padding:0.2em 0;">
+            <h2 style="margin:0; font-weight:700;">
+              <a href="https://www.zeitverschiebung.net/en/city/5368453"
+                 style="text-decoration:none; color:#ffffff; text-shadow:0 2px 6px rgba(0,0,0,0.45);">
+                <span style="font-size:0.8em; opacity:0.75;">Current local time in</span><br />
+                <span style="font-weight:800;">Los Banos, United States</span>
+              </a>
+            </h2>
+
+            <iframe
+              allowtransparency="true"
+              frameborder="0"
+              scrolling="no"
+              height="140"
+              src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=large&timezone=America%2FLos_Angeles"
+              style="background:transparent; border:none; width:100%;">
+            </iframe>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- WIDGETS (same exact width as header) -->
-    <div class="container">
-      <div class="grid">
-        <div class="tile">
-          <iframe scrolling="no"
-            src="https://cdnres.willyweather.com/widget/loadView.html?id=147640"></iframe>
-        </div>
+    <!-- WIDGETS LOCKED TO BOTTOM -->
+    <div style="padding-bottom:10px;">
+      <div class="container">
+        <div class="grid">
+          <div class="tile">
+            <iframe scrolling="no"
+              src="https://cdnres.willyweather.com/widget/loadView.html?id=147640">
+            </iframe>
+          </div>
 
-        <div class="tile">
-          <iframe scrolling="no"
-            src="https://cdnres.willyweather.com/widget/loadView.html?id=118338"></iframe>
-        </div>
+          <div class="tile">
+            <iframe scrolling="no"
+              src="https://cdnres.willyweather.com/widget/loadView.html?id=118338">
+            </iframe>
+          </div>
 
-        <div class="tile">
-          <iframe scrolling="no"
-            src="https://cdnres.willyweather.com/widget/loadView.html?id=118331"></iframe>
+          <div class="tile">
+            <iframe scrolling="no"
+              src="https://cdnres.willyweather.com/widget/loadView.html?id=118331">
+            </iframe>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </body>
-</html>
