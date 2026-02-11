@@ -5,53 +5,123 @@
   <title>BFCo Weather</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: transparent;
-      font-family: Arial, sans-serif;
-      color: white;
-    }
-
-    body {
-      background: url("YOUR_BACKGROUND_URL_HERE") no-repeat center center fixed;
+    html, body { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; }
+    body{
+      /* Replace with your background image/GIF file in the repo, e.g. bg.gif */
+      background: url("bg.png") no-repeat center center fixed;
       background-size: cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color:#fff;
     }
 
-    .panel {
-      text-align: center;
-      background: rgba(0,0,0,0.25);
-      padding: 20px 40px;
-      border-radius: 14px;
+    /* Optional: darken background slightly so widgets/text pop */
+    .overlay {
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.15);
+      pointer-events:none;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 48px;
-      text-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    .wrap{
+      position:relative;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      padding:18px;
+      box-sizing:border-box;
     }
 
-    iframe {
-      border: none;
-      background: transparent;
+    /* Header panel (clock) */
+    .header{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .panel{
+      width:100%;
+      max-width: 1200px;
+      background: rgba(0,0,0,0.22);
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-sizing:border-box;
+      backdrop-filter: blur(2px);
+    }
+
+    /* 3-up grid for weather widgets */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:16px;
+      flex:1;
+      align-items:stretch;
+    }
+
+    .tile{
+      background: rgba(0,0,0,0.22);
+      border-radius:16px;
+      overflow:hidden;
+      backdrop-filter: blur(2px);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .tile iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      background:transparent;
+    }
+
+    /* Make it work on smaller screens too */
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: 1fr; }
+      .tile{ min-height: 240px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="panel">
-    <h1>Los Banos, CA</h1>
+  <div class="overlay"></div>
 
-    <iframe
-      src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=large&timezone=America%2FLos_Angeles"
-      width="420"
-      height="140"
-      allowtransparency="true">
-    </iframe>
+  <div class="wrap">
+    <!-- CLOCK / HEADER -->
+    <div class="header">
+      <div class="panel">
+        <!-- your clock widget -->
+        <div style="text-align:center; padding:0.2em 0; background:transparent;">
+          <h2 style="margin:0; font-weight:700;">
+            <a href="https://www.zeitverschiebung.net/en/city/5368453"
+               style="text-decoration:none; color:#ffffff; text-shadow:0 2px 6px rgba(0,0,0,0.45);">
+              <span style="font-size:0.8em; opacity:0.75;">Current local time in</span><br />
+              <span style="font-weight:800;">Los Banos, United States</span>
+            </a>
+          </h2>
+
+          <iframe
+            allowtransparency="true"
+            frameborder="0"
+            scrolling="no"
+            height="140"
+            src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=large&timezone=America%2FLos_Angeles"
+            style="background:transparent; border:none;"
+            width="100%"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEATHER WIDGETS -->
+    <div class="grid">
+      <div class="tile">
+        <iframe src="PASTE_WEATHER_WIDGET_URL_1_HERE" scrolling="no"></iframe>
+      </div>
+
+      <div class="tile">
+        <iframe src="PASTE_WEATHER_WIDGET_URL_2_HERE" scrolling="no"></iframe>
+      </div>
+
+      <div class="tile">
+        <iframe src="PASTE_WEATHER_WIDGET_URL_3_HERE" scrolling="no"></iframe>
+      </div>
+    </div>
   </div>
 </body>
 </html>
