@@ -14,29 +14,28 @@
     }
 
     body {
-      /* Your background image */
-      background: url("bg.png") no-repeat center center fixed;
+      /* Fullscreen background */
+      background-image: url("bg.png");
+      background-repeat: no-repeat;
+      background-size: cover;
 
-      /* IMPORTANT:
-         cover = fills screen but zooms/crops
-         contain = shows full image but may add space
-         We'll use a hybrid approach below.
-      */
-      background-size: contain;
-      background-color: #1a2a3a; /* fills edges if contain leaves space */
+      /* IMPORTANT: keep the logo in the top-left visible */
+      background-position: left top;
+
+      background-color: #1a2a3a;
       color: #fff;
       overflow: hidden;
     }
 
-    /* Slight dark overlay so widgets/text read well */
+    /* Light readability overlay (doesn't create boxes) */
     .overlay {
       position: fixed;
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.18) 0%,
-        rgba(0,0,0,0.10) 55%,
-        rgba(0,0,0,0.16) 100%
+        rgba(0,0,0,0.12) 0%,
+        rgba(0,0,0,0.06) 55%,
+        rgba(0,0,0,0.10) 100%
       );
       pointer-events: none;
     }
@@ -44,22 +43,23 @@
     .wrap {
       position: relative;
       height: 100%;
+      padding: 18px 22px;
+      box-sizing: border-box;
+
       display: grid;
       grid-template-rows: auto 1fr;
-      gap: 14px;
-      padding: 16px 18px;
-      box-sizing: border-box;
+      gap: 16px;
     }
 
-    /* Header (clock) */
-    .header {
-      display: flex;
-      justify-content: center;
+    /* One shared width container so header + widgets align perfectly */
+    .container {
+      width: min(1400px, 96vw);
+      margin: 0 auto;
     }
 
-    .panel {
+    /* Header panel (this is the ONLY stretched/wide element) */
+    .headerPanel {
       width: 100%;
-      max-width: 1400px;
       background: rgba(0,0,0,0.16);
       border-radius: 18px;
       padding: 12px 16px;
@@ -67,46 +67,47 @@
       backdrop-filter: blur(2px);
     }
 
-    /* 3 widgets row */
+    /* 3-up widget row aligned to same container width */
     .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
-      align-items: center;
-      justify-items: center;
       width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      align-items: start;
     }
 
-    /* Each widget tile */
+    /* Smaller, even tiles */
     .tile {
-      width: 100%;
-      height: 340px;              /* smaller = less “giant boxes” */
       background: rgba(0,0,0,0.14);
       border-radius: 18px;
-      overflow: hidden;
-      backdrop-filter: blur(2px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6px;
+      padding: 12px 12px 14px;
       box-sizing: border-box;
+      backdrop-filter: blur(2px);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      /* keeps all 3 tiles same height */
+      height: 290px;
     }
 
+    /*
+      KEY FIX: do NOT stretch the iframe to 100%.
+      Keep the natural WillyWeather widget size so it doesn't look warped.
+    */
     .tile iframe {
-      width: 100%;
-      height: 100%;
+      width: 300px;
+      height: 228px;
       border: 0;
       display: block;
       background: transparent;
     }
 
-    /* Make it scale nicely on smaller screens */
-    @media (max-width: 1200px) {
-      body { background-size: cover; }
+    /* Responsive fallback */
+    @media (max-width: 1100px) {
       .grid { grid-template-columns: 1fr; }
-      .tile { height: 260px; }
+      .tile { height: auto; }
     }
   </style>
 </head>
@@ -115,9 +116,9 @@
   <div class="overlay"></div>
 
   <div class="wrap">
-    <!-- CLOCK / HEADER -->
-    <div class="header">
-      <div class="panel">
+    <!-- HEADER (aligned to container width) -->
+    <div class="container">
+      <div class="headerPanel">
         <div style="text-align:center; padding:0.2em 0; background:transparent;">
           <h2 style="margin:0; font-weight:700;">
             <a href="https://www.zeitverschiebung.net/en/city/5368453"
@@ -133,33 +134,29 @@
             scrolling="no"
             height="140"
             src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=large&timezone=America%2FLos_Angeles"
-            style="background:transparent; border:none;"
+            style="background:transparent; border:none; width:100%;"
             width="100%"></iframe>
         </div>
       </div>
     </div>
 
-    <!-- 3 WILLYWEATHER WIDGETS -->
-    <div class="grid">
-      <!-- CURRENT WEATHER -->
-      <div class="tile">
-        <iframe scrolling="no"
-          src="https://cdnres.willyweather.com/widget/loadView.html?id=147640">
-        </iframe>
-      </div>
+    <!-- WIDGETS (same exact width as header) -->
+    <div class="container">
+      <div class="grid">
+        <div class="tile">
+          <iframe scrolling="no"
+            src="https://cdnres.willyweather.com/widget/loadView.html?id=147640"></iframe>
+        </div>
 
-      <!-- RAIN -->
-      <div class="tile">
-        <iframe scrolling="no"
-          src="https://cdnres.willyweather.com/widget/loadView.html?id=118338">
-        </iframe>
-      </div>
+        <div class="tile">
+          <iframe scrolling="no"
+            src="https://cdnres.willyweather.com/widget/loadView.html?id=118338"></iframe>
+        </div>
 
-      <!-- WIND -->
-      <div class="tile">
-        <iframe scrolling="no"
-          src="https://cdnres.willyweather.com/widget/loadView.html?id=118331">
-        </iframe>
+        <div class="tile">
+          <iframe scrolling="no"
+            src="https://cdnres.willyweather.com/widget/loadView.html?id=118331"></iframe>
+        </div>
       </div>
     </div>
   </div>
