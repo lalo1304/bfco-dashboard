@@ -1289,7 +1289,7 @@ let activityGeoLayer = null;
 
 function getFieldStatus(field) {
   // Check Planting Actual column from the Google Sheet first
-  if (plantingActual[field]) return { color: '#2e7d32', label: 'Planted' };
+  if (fieldPlantingActual[field]) return { color: '#2e7d32', label: 'Planted' };
   // Fallback: check HeavyConnect planting task codes
   const tasks = pivot[field]?.tasks || {};
   const hasPlanting = Object.keys(tasks).some(t => getCategory(t) === 'PLANTING');
