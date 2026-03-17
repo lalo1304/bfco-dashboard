@@ -403,9 +403,76 @@ header {
 ::-webkit-scrollbar-track{background:var(--cream)}
 ::-webkit-scrollbar-thumb{background:var(--straw);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--clay)}
+
+/* ─── LOGIN ──────────────────────────────────── */
+#login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--soil);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#login-box{background:var(--white);border-radius:var(--rad);padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.login-logo{text-align:center;margin-bottom:1.5rem}
+.login-logo-title{font-size:1.3rem;font-weight:800;color:var(--soil);letter-spacing:.04em}
+.login-logo-sub{font-size:.72rem;color:var(--clay);margin-top:.2rem}
+.login-field{margin-bottom:1rem}
+.login-field label{display:block;font-size:.72rem;font-weight:700;color:var(--clay);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em}
+.login-field input{width:100%;padding:.65rem .9rem;border:1.5px solid var(--straw);border-radius:8px;font-size:.88rem;color:var(--soil);background:var(--cream);outline:none;transition:border .2s;box-sizing:border-box}
+.login-field input:focus{border-color:var(--soil);background:#fff}
+.login-btn{width:100%;padding:.75rem;background:var(--soil);color:var(--wheat);border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;margin-top:.5rem;letter-spacing:.04em;transition:opacity .2s}
+.login-btn:hover{opacity:.88}
+.login-btn:disabled{opacity:.5;cursor:not-allowed}
+.login-error{color:#c62828;font-size:.75rem;text-align:center;margin-top:.75rem;min-height:1.2rem}
+.login-loading{color:var(--clay);font-size:.75rem;text-align:center;margin-top:.75rem}
+
+/* ── LOGIN ─────────────────────────────────── */
+#login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--soil);display:flex;align-items:center;justify-content:center;z-index:9999;}
+#login-box{background:var(--white);border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.25);}
+#login-logo{font-size:1.6rem;font-weight:800;color:var(--soil);margin-bottom:.25rem;letter-spacing:-.02em;}
+#login-sub{font-size:.78rem;color:var(--clay);margin-bottom:1.8rem;}
+.lin-label{font-size:.72rem;font-weight:700;color:var(--bark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem;display:block;}
+.lin-input{width:100%;padding:.65rem .85rem;border:1.5px solid var(--straw);border-radius:8px;font-size:.88rem;color:var(--soil);background:var(--white);margin-bottom:1rem;font-family:inherit;outline:none;transition:border-color .2s;}
+.lin-input:focus{border-color:var(--soil);}
+#login-btn{width:100%;padding:.75rem;background:var(--soil);color:var(--wheat);border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;}
+#login-btn:hover{opacity:.88;}
+#login-err{color:#c62828;font-size:.75rem;margin-top:.75rem;text-align:center;min-height:1rem;}
+#login-loading{color:var(--clay);font-size:.75rem;margin-top:.75rem;text-align:center;display:none;}
+#main-app{display:none;}
+#user-badge{font-size:.72rem;color:var(--straw);padding:.3rem .7rem;border-radius:6px;background:rgba(255,255,255,.1);cursor:pointer;}
+
+
+#login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#1a1008;z-index:9999;display:flex;align-items:center;justify-content:center;}
+#login-box{background:#fff;border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.3);}
+#login-logo{font-size:1.6rem;font-weight:800;color:var(--soil);margin-bottom:.25rem;}
+#login-sub{font-size:.8rem;color:var(--clay);margin-bottom:1.5rem;}
+#login-box input{width:100%;padding:.65rem .9rem;border:1px solid var(--straw);border-radius:8px;font-size:.85rem;margin-bottom:.75rem;box-sizing:border-box;font-family:'DM Sans',sans-serif;}
+#login-btn{width:100%;padding:.7rem;background:var(--soil);color:var(--wheat);border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;}
+#login-btn:hover{background:#3a2208;}
+#login-error{color:#c62828;font-size:.75rem;margin-top:.5rem;display:none;text-align:center;}
+#login-loading{color:var(--clay);font-size:.75rem;margin-top:.5rem;display:none;text-align:center;}
+
+#login-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#1a1008;z-index:9999;display:flex;align-items:center;justify-content:center;}
+#login-box{background:#fff;border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:380px;}
+#login-logo{font-size:1.5rem;font-weight:800;color:#2C1A0E;margin-bottom:.2rem;}
+#login-sub{font-size:.78rem;color:#8B7355;margin-bottom:1.5rem;}
+.lin-label{display:block;font-size:.72rem;font-weight:700;color:#2C1A0E;margin-bottom:.3rem;}
+.lin-input{width:100%;padding:.6rem .85rem;border:1px solid #D4B896;border-radius:8px;font-size:.85rem;margin-bottom:1rem;box-sizing:border-box;}
+#login-btn{width:100%;padding:.7rem;background:#2C1A0E;color:#F5DEB3;border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;}
+#login-btn:hover{background:#3a2208;}
+#login-btn:disabled{opacity:.6;cursor:not-allowed;}
+#login-err{color:#c62828;font-size:.73rem;margin-top:.5rem;min-height:1rem;text-align:center;}
+#login-loading{color:#8B7355;font-size:.73rem;margin-top:.3rem;text-align:center;display:none;}
 </style>
 </head>
 <body>
+<div id="login-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#2C1A0E;z-index:99999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:2.5rem 2rem;width:100%;max-width:380px;">
+    <div style="font-size:1.5rem;font-weight:800;color:#2C1A0E;margin-bottom:.2rem;">🌾 BFCo Farm</div>
+    <div style="font-size:.78rem;color:#8B7355;margin-bottom:1.5rem;">Farm Operations Dashboard — Sign in to continue</div>
+    <div style="font-size:.72rem;font-weight:700;color:#2C1A0E;margin-bottom:.3rem;">Email</div>
+    <input id="login-email" type="email" placeholder="you@bfco.com" autocomplete="email" style="width:100%;padding:.6rem .85rem;border:1px solid #D4B896;border-radius:8px;font-size:.85rem;margin-bottom:1rem;box-sizing:border-box;">
+    <div style="font-size:.72rem;font-weight:700;color:#2C1A0E;margin-bottom:.3rem;">Password</div>
+    <input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password" style="width:100%;padding:.6rem .85rem;border:1px solid #D4B896;border-radius:8px;font-size:.85rem;margin-bottom:1rem;box-sizing:border-box;">
+    <button id="login-btn" onclick="doLogin()" style="width:100%;padding:.7rem;background:#2C1A0E;color:#F5DEB3;border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;">Sign In</button>
+    <div id="login-err" style="color:#c62828;font-size:.73rem;margin-top:.5rem;min-height:1rem;text-align:center;"></div>
+    <div id="login-loading" style="color:#8B7355;font-size:.73rem;margin-top:.3rem;text-align:center;display:none;">Verifying access...</div>
+  </div>
+</div>
 
 <!-- LOADING -->
 <div class="ldscreen" id="ld">
@@ -1912,7 +1979,51 @@ async function init(){
     console.error(e);
   }
 }
-init();
+// init called after login
+
+// ─── LOGIN ────────────────────────────────────
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value.trim();
+  const err=document.getElementById('login-err');
+  const load=document.getElementById('login-loading');
+  const btn=document.getElementById('login-btn');
+  err.textContent='';
+  if(!email||!pass){err.textContent='Please enter your email and password.';return;}
+  load.style.display='block';btn.disabled=true;
+  fetch(SHEETS_URL+'?type=login&email='+encodeURIComponent(email)+'&pass='+encodeURIComponent(pass),{redirect:'follow',mode:'cors'})
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.success){
+        sessionStorage.setItem('bfco_user',JSON.stringify({email,name:d.name}));
+        document.getElementById('login-screen').style.display='none';
+        const h=new Date().getHours();
+        const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+        document.getElementById('hero-greeting').textContent=`${g}, ${d.name} — here's your farm today`;
+        init();
+      } else {
+        err.textContent=d.message||'Invalid email or password.';
+        load.style.display='none';btn.disabled=false;
+      }
+    })
+    .catch(()=>{err.textContent='Connection error. Please try again.';load.style.display='none';btn.disabled=false;});
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login-screen')&&document.getElementById('login-screen').style.display!=='none')doLogin();});
+window.addEventListener('load',function(){
+  sessionStorage.removeItem('bfco_user');
+  const u=sessionStorage.getItem('bfco_user');
+  if(u){
+    try{
+      const{name}=JSON.parse(u);
+      document.getElementById('login-screen').style.display='none';
+      const h=new Date().getHours();
+      const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+      document.getElementById('hero-greeting').textContent=`${g}, ${name} — here's your farm today`;
+      init();
+    }catch(e){sessionStorage.removeItem('bfco_user');}
+  }
+});
 </script>
+</div><!-- /main-app -->
 </body>
 </html>
