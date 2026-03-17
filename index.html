@@ -494,6 +494,7 @@ header {
   <div class="hmeta">
     <div class="hpill"><div class="hdot"></div><span id="sync-time">Live</span></div>
     <span class="hmtext" id="rec-count">—</span>
+    <button onclick="doLogout()" style="background:none;border:1px solid rgba(255,255,255,.3);color:var(--straw);padding:.25rem .75rem;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">Sign Out</button>
   </div>
 </header>
 
@@ -846,11 +847,11 @@ function scheduledDate(f){return pivot[f]?.plantingSchedule||null;}
 // ─── FETCH ────────────────────────────────────
 async function fetchData(){
   setMsg('Loading field data from Google Sheets…');
-  const user=JSON.parse(sessionStorage.getItem('bfco_user')||'{}');
+  const user=JSON.parse(localStorage.getItem('bfco_user')||'{}');
   const res=await fetch(SHEETS_URL+(user.token?'?token='+encodeURIComponent(user.token):''),{redirect:'follow',mode:'cors'});
   if(!res.ok)throw new Error('HTTP '+res.status);
   const data=JSON.parse(await res.text());
-  if(data?.error&&data.error.includes('token')){sessionStorage.removeItem('bfco_user');document.getElementById('login-screen').style.display='flex';document.getElementById('login-err').textContent='Session expired. Please sign in again.';return;}
+  if(data?.error&&data.error.includes('token')){localStorage.removeItem('bfco_user');document.getElementById('login-screen').style.display='flex';document.getElementById('login-err').textContent='Session expired. Please sign in again.';return;}
   if(!data?.crops)throw new Error('No crop data returned');
   pivot={};allEntries=[];irrData=[];
   // First pass — find all fields that appear in more than one tab
@@ -1680,7 +1681,7 @@ async function loadIrrigation(){
   const grid=document.getElementById('irr-grid');
   if(grid)grid.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--clay)">💧 Loading irrigation data…</div>';
   try{
-    const irrUser=JSON.parse(sessionStorage.getItem('bfco_user')||'{}');
+    const irrUser=JSON.parse(localStorage.getItem('bfco_user')||'{}');
   const res=await fetch(IRR_URL+(irrUser.token?'?token='+encodeURIComponent(irrUser.token):''),{redirect:'follow',mode:'cors'});
     const data=JSON.parse(await res.text());
     const IRR_COLORS={'Furrow, pre-irrigation':'#1565C0','Drip, pre-irrigation':'#1976D2','Sprinkler, pre-irrigation':'#42A5F5','Furrow, irrigation':'#00695C','Drip, irrigation':'#3D6B35','Sprinkler, irrigation':'#26A69A'};
@@ -1985,6 +1986,10 @@ async function init(){
 // init called after login
 
 // ─── LOGIN ────────────────────────────────────
+function doLogout(){
+  localStorage.removeItem('bfco_user');
+  location.reload();
+}
 function doLogin(){
   const email=document.getElementById('login-email').value.trim();
   const pass=document.getElementById('login-pass').value.trim();
@@ -1998,7 +2003,7 @@ function doLogin(){
     .then(r=>r.json())
     .then(d=>{
       if(d.success){
-        sessionStorage.setItem('bfco_user',JSON.stringify({email,name:d.name,token:d.token}));
+        localStorage.setItem('bfco_user',JSON.stringify({email,name:d.name,token:d.token}));
         document.getElementById('login-screen').style.display='none';
         const h=new Date().getHours();
         const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
@@ -2013,8 +2018,7 @@ function doLogin(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login-screen')&&document.getElementById('login-screen').style.display!=='none')doLogin();});
 window.addEventListener('load',function(){
-  sessionStorage.removeItem('bfco_user');
-  const u=sessionStorage.getItem('bfco_user');
+  const u=localStorage.getItem('bfco_user');
   if(u){
     try{
       const{name}=JSON.parse(u);
@@ -2023,7 +2027,7 @@ window.addEventListener('load',function(){
       const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
       document.getElementById('hero-greeting').textContent=`${g}, ${name} — here's your farm today`;
       init();
-    }catch(e){sessionStorage.removeItem('bfco_user');}
+    }catch(e){localStorage.removeItem('bfco_user');}
   }
 });
 </script>
