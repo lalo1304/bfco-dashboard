@@ -846,9 +846,11 @@ function scheduledDate(f){return pivot[f]?.plantingSchedule||null;}
 // ─── FETCH ────────────────────────────────────
 async function fetchData(){
   setMsg('Loading field data from Google Sheets…');
-  const res=await fetch(SHEETS_URL,{redirect:'follow',mode:'cors'});
+  const user=JSON.parse(sessionStorage.getItem('bfco_user')||'{}');
+  const res=await fetch(SHEETS_URL+(user.token?'?token='+encodeURIComponent(user.token):''),{redirect:'follow',mode:'cors'});
   if(!res.ok)throw new Error('HTTP '+res.status);
   const data=JSON.parse(await res.text());
+  if(data?.error&&data.error.includes('token')){sessionStorage.removeItem('bfco_user');document.getElementById('login-screen').style.display='flex';document.getElementById('login-err').textContent='Session expired. Please sign in again.';return;}
   if(!data?.crops)throw new Error('No crop data returned');
   pivot={};allEntries=[];irrData=[];
   // First pass — find all fields that appear in more than one tab
@@ -1678,7 +1680,8 @@ async function loadIrrigation(){
   const grid=document.getElementById('irr-grid');
   if(grid)grid.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--clay)">💧 Loading irrigation data…</div>';
   try{
-    const res=await fetch(IRR_URL,{redirect:'follow',mode:'cors'});
+    const irrUser=JSON.parse(sessionStorage.getItem('bfco_user')||'{}');
+  const res=await fetch(IRR_URL+(irrUser.token?'?token='+encodeURIComponent(irrUser.token):''),{redirect:'follow',mode:'cors'});
     const data=JSON.parse(await res.text());
     const IRR_COLORS={'Furrow, pre-irrigation':'#1565C0','Drip, pre-irrigation':'#1976D2','Sprinkler, pre-irrigation':'#42A5F5','Furrow, irrigation':'#00695C','Drip, irrigation':'#3D6B35','Sprinkler, irrigation':'#26A69A'};
     irrData=(data.irrigation||[]).map(r=>({field:r[0],date:r[1],task:r[2],type:r[3],crop:r[4],color:IRR_COLORS[r[3]]||(r[3]&&r[3].includes('pre')?'#1565C0':'#3D6B35')}));
@@ -1995,7 +1998,7 @@ function doLogin(){
     .then(r=>r.json())
     .then(d=>{
       if(d.success){
-        sessionStorage.setItem('bfco_user',JSON.stringify({email,name:d.name}));
+        sessionStorage.setItem('bfco_user',JSON.stringify({email,name:d.name,token:d.token}));
         document.getElementById('login-screen').style.display='none';
         const h=new Date().getHours();
         const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
