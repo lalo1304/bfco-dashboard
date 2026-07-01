@@ -2172,6 +2172,7 @@ export default function App() {
                                         order_number: r.order_number,
                                         lbs_gross: r.lbs_gross, lbs_tare: r.lbs_tare, lbs_net: r.lbs_net,
                                       });
+                                      try { setObEditCommodities(JSON.parse(r.commodity_detail||"[]")); } catch { setObEditCommodities([{type:"",qty:"",size:""}]); }
                                     }}>✏️</button>
                                     {r.is_void
                                       ? <button style={{ ...S.iconBtn, color:"#27ae60" }} title="Restore" onClick={() => handleObUnvoid(r.id)}>↩️</button>
