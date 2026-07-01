@@ -512,6 +512,7 @@ export default function App() {
   const [obComTypeFilter, setObComTypeFilter]   = useState("all");
   const [obEditEntry, setObEditEntry]         = useState(null);
   const [obEditVals, setObEditVals]           = useState({});
+  const [obEditCommodities, setObEditCommodities] = useState([]);
   const [obLogRange, setObLogRange]           = useState("week");
   const [obLogStart, setObLogStart]           = useState("");
   const [obLogEnd, setObLogEnd]               = useState("");
@@ -836,7 +837,12 @@ export default function App() {
   }
 
   async function handleObEditSave() {
-    const { data, error } = await supabase.from("outbound_tags").update({ ...obEditVals }).eq("id", obEditEntry.id).select();
+    const updatedVals = {
+      ...obEditVals,
+      commodity: obEditCommodities.map(c=>c.type).filter(Boolean).join(", "),
+      commodity_detail: JSON.stringify(obEditCommodities),
+    };
+    const { data, error } = await supabase.from("outbound_tags").update(updatedVals).eq("id", obEditEntry.id).select();
     if (!error) {
       setOutboundLogs(p => p.map(r => r.id === obEditEntry.id ? { ...r, ...data[0] } : r));
       setObEditEntry(null); setObEditVals({});
@@ -2492,20 +2498,17 @@ export default function App() {
                         <input style={{ ...S.input, marginTop:3, background:"#f0f0f0", color:"#888" }} value={obEditEntry.tag_number||""} readOnly />
                       </div>
                       {[
-                        { key:"date_time",        label:"Date / Time"     },
-                        { key:"weighted_for",     label:"Weighed For"     },
-                        { key:"delivered_to",     label:"Delivered To"    },
-                        { key:"commodity",        label:"Commodity"       },
-                        { key:"bins",             label:"Bins"            },
-                        { key:"cartons",          label:"Cartons"         },
-                        { key:"driver",           label:"Driver"          },
-                        { key:"trailer_license",  label:"Trailer License #"},
-                        { key:"carrier",          label:"Carrier"         },
-                        { key:"truck_license",    label:"Truck License #" },
-                        { key:"order_number",     label:"Order #"         },
-                        { key:"lbs_gross",        label:"Lbs Gross"       },
-                        { key:"lbs_tare",         label:"Lbs Tare"        },
-                        { key:"lbs_net",          label:"Lbs Net"         },
+                        { key:"date_time",       label:"Date / Time"      },
+                        { key:"weighted_for",    label:"Weighed For"      },
+                        { key:"delivered_to",    label:"Delivered To"     },
+                        { key:"order_number",    label:"Order #"          },
+                        { key:"driver",          label:"Driver"           },
+                        { key:"carrier",         label:"Carrier"          },
+                        { key:"trailer_license", label:"Trailer License #"},
+                        { key:"truck_license",   label:"Truck License #"  },
+                        { key:"lbs_gross",       label:"Lbs Gross"        },
+                        { key:"lbs_tare",        label:"Lbs Tare"         },
+                        { key:"lbs_net",         label:"Lbs Net"          },
                       ].map(f => (
                         <div key={f.key} style={{ marginBottom:10 }}>
                           <label style={{ fontSize:11, fontWeight:"bold", color:"#888", textTransform:"uppercase", letterSpacing:1 }}>{f.label}</label>
@@ -2513,6 +2516,48 @@ export default function App() {
                             onChange={e => setObEditVals(p => ({ ...p, [f.key]: e.target.value }))} />
                         </div>
                       ))}
+
+                      {/* Dynamic Commodity Editor */}
+                      <div style={{ marginBottom:10 }}>
+                        <label style={{ fontSize:11, fontWeight:"bold", color:"#888", textTransform:"uppercase", letterSpacing:1 }}>Commodities</label>
+                        {obEditCommodities.map((com, idx) => (
+                          <div key={idx} style={{ border:"1px solid #c8d8f0", borderRadius:10, padding:10, marginTop:8, background:"#f5f8ff" }}>
+                            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+                              <span style={{ fontSize:11, fontWeight:"bold", color:"#1e3a5f" }}>Commodity #{idx+1}</span>
+                              {idx > 0 && (
+                                <button style={{ background:"none", border:"none", color:"#c0392b", fontSize:12, cursor:"pointer", fontFamily:"'Georgia',serif" }}
+                                  onClick={() => setObEditCommodities(p => p.filter((_,i)=>i!==idx))}>Remove</button>
+                              )}
+                            </div>
+                            <div style={{ marginBottom:6 }}>
+                              <div style={{ fontSize:11, color:"#666", marginBottom:3 }}>Type</div>
+                              <select style={{ ...S.input, cursor:"pointer" }} value={com.type||""}
+                                onChange={e => setObEditCommodities(p => p.map((c,i)=>i===idx?{...c,type:e.target.value}:c))}>
+                                <option value="">Select type...</option>
+                                <option value="Seedless">Seedless</option>
+                                <option value="Mini">Mini</option>
+                                <option value="Organic">Organic</option>
+                              </select>
+                            </div>
+                            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                              <div>
+                                <div style={{ fontSize:11, color:"#666", marginBottom:3 }}>Qty</div>
+                                <input style={S.input} type="number" placeholder="0" value={com.qty||""}
+                                  onChange={e => setObEditCommodities(p => p.map((c,i)=>i===idx?{...c,qty:e.target.value}:c))} />
+                              </div>
+                              <div>
+                                <div style={{ fontSize:11, color:"#666", marginBottom:3 }}>Size</div>
+                                <input style={S.input} placeholder="e.g. 8" value={com.size||""}
+                                  onChange={e => setObEditCommodities(p => p.map((c,i)=>i===idx?{...c,size:e.target.value}:c))} />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        <button style={{ width:"100%", padding:"8px", border:"1.5px dashed #1e3a5f", borderRadius:10, background:"transparent", color:"#1e3a5f", cursor:"pointer", fontFamily:"'Georgia',serif", fontSize:13, marginTop:8 }}
+                          onClick={() => setObEditCommodities(p => [...p, {type:"",qty:"",size:""}])}>
+                          + Add Commodity
+                        </button>
+                      </div>
                       <div style={{ display:"flex", gap:10, marginTop:8 }}>
                         <button style={S.btnOutline} onClick={() => setObEditEntry(null)}>Cancel</button>
                         <button style={{ ...S.btnPrimary, flex:2, background:"#1e3a5f" }} onClick={handleObEditSave}>✓ Save Changes</button>
